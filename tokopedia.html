@@ -3,104 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOKOPEDIA + TELEGRAM LOGGER 🔥</title>
+    <title>🌀 TOKOPEDIA LOADER</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #41b549, #2d8c3a); color: white; min-height: 100vh; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; background: rgba(0,0,0,0.7); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        h1 { text-align: center; margin-bottom: 20px; font-size: 2.5em; text-shadow: 3px 3px 5px black; }
-        .telegram-panel { background: rgba(255,193,7,0.2); border: 2px solid #ffc107; border-radius: 10px; padding: 15px; margin: 15px 0; }
-        .btn { display: inline-block; background: #41b549; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 8px; transition: 0.3s; border: none; cursor: pointer; }
-        .btn:hover { background: #2d8c3a; transform: scale(1.05); }
-        .btn-telegram { background: #ffc107; color: black; }
-        iframe { width: 100%; height: 500px; border: 3px solid #ffc107; border-radius: 10px; margin-top: 20px; background: white; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff41;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .terminal {
+            padding: 20px;
+            height: 100vh;
+        }
+        .header {
+            border-bottom: 1px solid #00ff41;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .status-line {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #00ff41;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .btn {
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 8px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+        }
+        .log {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            padding: 10px;
+            margin-top: 20px;
+            background: #111;
+        }
+        iframe {
+            width: 100%;
+            height: 65vh;
+            border: none;
+            margin-top: 20px;
+            background: white;
+        }
+        .telegram-badge {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #0088cc;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🛍️ TOKOPEDIA + TELEGRAM LOGGER 🔥</h1>
-        
-        <div class="telegram-panel">
-            <h3>📡 TELEGRAM CONNECTED ✅</h3>
-            <p>Bot: <code>8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18</code></p>
-            <p>Chat ID: <code>8313500840</code></p>
-            <button class="btn btn-telegram" onclick="sendTelegram('🚀 Tokopedia Monitor Started')">📤 REPORT START</button>
+    <div class="terminal">
+        <div class="header">
+            <h1>🌀 TOKOPEDIA_LOADER v2.1</h1>
+            <div class="status-line">
+                <div class="status-dot"></div>
+                <span id="status">READY</span>
+            </div>
         </div>
-        
-        <button class="btn" onclick="loadTokopedia()">🔥 LOAD TOKOPEDIA</button>
-        <button class="btn" onclick="forceLoad()">⚡ FORCE LOAD (NO CACHE)</button>
-        <button class="btn" onclick="checkPerformance()">📊 CHECK PERFORMANCE</button>
-        
-        <div id="log"></div>
-        <iframe id="tokopediaFrame"></iframe>
+
+        <div>
+            <button class="btn" onclick="loadPage()">▶️ LOAD</button>
+            <button class="btn" onclick="forceLoad()">⚡ FORCE</button>
+            <button class="btn" onclick="clearAll()">🗑️ CLEAR</button>
+            <button class="btn" onclick="checkHealth()">🔍 CHECK</button>
+        </div>
+
+        <div class="log" id="log">
+            [SYSTEM] Cyber_VOIDS Tokopedia Loader initialized<br>
+            [TELEGRAM] Connected: 8313500840
+        </div>
+
+        <iframe id="frame" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
     </div>
+
+    <div class="telegram-badge" title="Telegram Connected">TG ✅</div>
 
     <script>
         const BOT_TOKEN = "8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18";
         const CHAT_ID = "8313500840";
-        
-        async function sendTelegram(message) {
-            const text = `🛍️ TOKOPEDIA LOG\n${message}\n⏰ ${new Date().toLocaleString()}`;
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        let logCount = 0;
+
+        function log(msg, toTelegram = false) {
+            const logElement = document.getElementById('log');
+            const time = new Date().toLocaleTimeString().substring(0,8);
+            const entry = `[${time}] ${msg}`;
             
+            logElement.innerHTML += `<br>${entry}`;
+            logElement.scrollTop = logElement.scrollHeight;
+            
+            document.getElementById('status').textContent = msg.substring(0, 30);
+            
+            if(toTelegram && logCount % 3 === 0) {
+                sendTelegram(msg);
+            }
+            logCount++;
+        }
+
+        async function sendTelegram(msg) {
             try {
-                await fetch(url, {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         chat_id: CHAT_ID,
-                        text: text
+                        text: `🌀 TOKPED: ${msg}`
                     })
                 });
-                log(`📤 Telegram: ${message}`);
-            } catch(e) {
-                console.error('Telegram error:', e);
-            }
+            } catch(e) {}
         }
-        
-        function log(message) {
-            const div = document.getElementById('log');
-            const p = document.createElement('p');
-            p.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-            div.appendChild(p);
+
+        function loadPage() {
+            log("Loading Tokopedia...", true);
+            const url = `https://www.tokopedia.com/?_t=${Date.now()}&bypass=1`;
+            document.getElementById('frame').src = url;
+            
+            setTimeout(() => {
+                log("Page loaded into frame");
+                sendTelegram("Page loaded successfully");
+            }, 2000);
         }
-        
-        function loadTokopedia() {
-            sendTelegram("Loading Tokopedia...");
-            const url = `https://www.tokopedia.com/?_=${Date.now()}&nocache=1`;
-            document.getElementById('tokopediaFrame').src = url;
-            log("Loading Tokopedia: " + url);
-        }
-        
+
         function forceLoad() {
-            sendTelegram("FORCE LOAD Tokopedia (no cache)");
-            // Clear local storage
+            log("Force loading (no cache)...", true);
             localStorage.clear();
             sessionStorage.clear();
             
-            // Buka di tab baru juga
-            const url = `https://www.tokopedia.com/?force=${Date.now()}`;
-            window.open(url, '_blank');
-            document.getElementById('tokopediaFrame').src = url;
-            log("Force load executed");
-        }
-        
-        function checkPerformance() {
-            const start = performance.now();
-            sendTelegram("Performance check started");
+            const url = `https://www.tokopedia.com/?force=${Date.now()}&nocache=1`;
+            document.getElementById('frame').src = url;
             
             setTimeout(() => {
-                const loadTime = performance.now() - start;
-                sendTelegram(`Load time: ${Math.round(loadTime)}ms`);
-                log(`Performance: ${Math.round(loadTime)}ms`);
-            }, 3000);
+                window.open(url, '_blank');
+            }, 500);
         }
-        
-        // Auto-load saat page dibuka
-        window.onload = function() {
-            sendTelegram("Tokopedia Monitor diakses");
-            loadTokopedia();
-        };
+
+        function clearAll() {
+            log("Clearing all storage...", true);
+            localStorage.clear();
+            sessionStorage.clear();
+            indexedDB.databases().then(dbs => {
+                dbs.forEach(db => indexedDB.deleteDatabase(db.name));
+            });
+            document.cookie.split(";").forEach(c => {
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/");
+            });
+            log("All storage cleared");
+        }
+
+        function checkHealth() {
+            log("Checking connection health...", true);
+            const start = performance.now();
+            
+            fetch('https://www.tokopedia.com', {mode: 'no-cors'})
+                .then(() => {
+                    const time = Math.round(performance.now() - start);
+                    log(`✓ Connection OK (${time}ms)`, true);
+                })
+                .catch(() => {
+                    log("✗ Connection failed", true);
+                });
+        }
+
+        // Auto-load
+        setTimeout(loadPage, 1000);
+        sendTelegram("Loader started");
     </script>
 </body>
 </html>
