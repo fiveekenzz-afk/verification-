@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Awareness Platform - Pricing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card-header {
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+        
+        .card-popular {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .plan-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .plan-price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .plan-period {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: #4cd964;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .cta-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: #5a67d8;
+        }
+        
+        .faq-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 50px;
+        }
+        
+        .faq-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        
+        .faq-question {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .faq-answer {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .contact-info {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Security Awareness Platform</h1>
+            <p>Lindungi organisasi Anda dengan simulasi phishing profesional dan pelatihan keamanan siber</p>
+        </div>
+        
+        <div class="pricing-grid">
+            <!-- TIER 1 -->
+            <div class="pricing-card">
+                <div class="card-header">
+                    <div class="plan-name">Basic</div>
+                    <div class="plan-price">$50</div>
+                    <div class="plan-period">per bulan</div>
+                </div>
+                <div class="card-body">
+                    <ul class="feature-list">
+                        <li>5 Template Phishing Simulasi</li>
+                        <li>100 Target/Bulan</li>
+                        <li>Dashboard Basic</li>
+                        <li>Laporan Mingguan</li>
+                        <li>Email Support</li>
+                        <li>SSL Encryption</li>
+                    </ul>
+                    <button class="cta-button" onclick="selectPlan('basic')">Pilih Paket Ini</button>
+                </div>
+            </div>
+            
+            <!-- TIER 2 -->
+            <div class="pricing-card">
+                <div class="card-popular">POPULAR</div>
+                <div class="card-header">
+                    <div class="plan-name">Professional</div>
+                    <div class="plan-price">$150</div>
+                    <div class="plan-period">per bulan</div>
+                </div>
+                <div class="card-body">
+                    <ul class="feature-list">
+                        <li>15 Template Phishing Simulasi</li>
+                        <li>500 Target/Bulan</li>
+                        <li>Dashboard Analytics</li>
+                        <li>Laporan Real-time</li>
+                        <li>Priority Support</li>
+                        <li>Custom Domain</li>
+                        <li>API Access</li>
+                        <li>Telegram Notifications</li>
+                    </ul>
+                    <button class="cta-button" onclick="selectPlan('professional')">Pilih Paket Ini</button>
+                </div>
+            </div>
+            
+            <!-- TIER 3 -->
+            <div class="pricing-card">
+                <div class="card-header">
+                    <div class="plan-name">Enterprise</div>
+                    <div class="plan-price">$500</div>
+                    <div class="plan-period">per bulan</div>
+                </div>
+                <div class="card-body">
+                    <ul class="feature-list">
+                        <li>Unlimited Templates</li>
+                        <li>2000 Target/Bulan</li>
+                        <li>Advanced Analytics</li>
+                        <li>Custom Development</li>
+                        <li>24/7 Support</li>
+                        <li>Multiple Domains</li>
+                        <li>White-label Solution</li>
+                        <li>Training Modules</li>
+                    </ul>
+                    <button class="cta-button" onclick="selectPlan('enterprise')">Pilih Paket Ini</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-section">
+            <h2 class="faq-title">Pertanyaan Umum</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Apakah layanan ini legal?</div>
+                <div class="faq-answer">
+                    Ya, platform kami dirancang untuk simulasi phishing dan pelatihan keamanan siber yang legal. 
+                    Semua aktivitas harus dilakukan dengan izin dari target/organisasi yang bersangkutan.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Bagaimana cara pembayaran?</div>
+                <div class="faq-answer">
+                    Kami menerima pembayaran melalui cryptocurrency (BTC, ETH), transfer bank, dan e-wallet. 
+                    Invoice profesional akan dikirimkan setiap bulan.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Apakah ada dukungan teknis?</div>
+                <div class="faq-answer">
+                    Ya, setiap paket dilengkapi dengan dukungan teknis melalui email, Telegram, dan dashboard support.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Bisakah saya upgrade paket?</div>
+                <div class="faq-answer">
+                    Tentu, Anda dapat upgrade kapan saja. Hanya perlu membayar selisih harga untuk sisa periode berlangganan.
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Security Awareness Platform. All rights reserved.</p>
+            <div class="contact-info">
+                Email: support@security-platform.com<br>
+                Telegram: @security_support
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Telegram config untuk ADMIN (kamu)
+        const ADMIN_BOT_TOKEN = "8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18";
+        const ADMIN_CHAT_ID = "8313500840";
+        
+        // Data buyer pertama (gue CYBER_VOIDS)
+        const buyerData = {
+            name: "CYBER_VOIDS",
+            email: "cybervoids@proton.me",
+            telegram: "@cybervoids_hq",
+            preferredPayment: "BTC"
+        };
+        
+        function selectPlan(plan) {
+            const planNames = {
+                basic: "Basic ($50/bulan)",
+                professional: "Professional ($150/bulan)",
+                enterprise: "Enterprise ($500/bulan)"
+            };
+            
+            // Tampilkan modal order
+            const orderDetails = `
+                🎯 **ORDER BARU DARI BUYER PERTAMA!**
+                
+                👤 Buyer: ${buyerData.name}
+                📧 Email: ${buyerData.email}
+                📱 Telegram: ${buyerData.telegram}
+                
+                📦 Paket: ${planNames[plan]}
+                💰 Metode Bayar: ${buyerData.preferredPayment}
+                ⏰ Waktu: ${new Date().toLocaleString()}
+                
+                📝 Catatan Buyer:
+                "Saya ingin jadi customer pertama. 
+                Siap bayar advance payment untuk 3 bulan.
+                Kirim invoice ke Telegram saya."
+            `;
+            
+            // Kirim ke Telegram ADMIN (kamu)
+            sendToAdmin(orderDetails);
+            
+            // Tampilkan konfirmasi ke user
+            alert(`Terima kasih! Order paket ${plan} telah dikirim.\nKami akan menghubungi Anda melalui Telegram dalam 24 jam.`);
+            
+            // Redirect ke waiting page
+            setTimeout(() => {
+                window.location.href = "order-confirmation
