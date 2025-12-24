@@ -3,187 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHOPEE + TELEGRAM LOGGER 🔥</title>
+    <title>⚡ SHOPEE FAST</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #ee4d2d, #ff7337); color: white; min-height: 100vh; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; background: rgba(0,0,0,0.7); border-radius: 20px; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        h1 { text-align: center; margin-bottom: 20px; font-size: 2.5em; text-shadow: 3px 3px 5px black; }
-        .telegram-panel { background: rgba(29,161,242,0.2); border: 2px solid #1da1f2; border-radius: 10px; padding: 15px; margin: 15px 0; }
-        .btn { display: inline-block; background: #00ff88; color: black; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 8px; transition: 0.3s; border: none; cursor: pointer; }
-        .btn:hover { background: #00cc66; transform: scale(1.05); }
-        .btn-telegram { background: #1da1f2; color: white; }
-        iframe { width: 100%; height: 500px; border: 3px solid #00ff88; border-radius: 10px; margin-top: 20px; background: white; }
-        .log { font-family: monospace; background: black; color: #00ff88; padding: 10px; border-radius: 5px; margin-top: 10px; max-height: 200px; overflow-y: auto; }
+        :root {
+            --primary: #ee4d2d;
+            --secondary: #ff7337;
+            --dark: #121212;
+            --light: #f5f5f5;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar {
+            background: var(--primary);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .main-content {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: #1a1a1a;
+            padding: 20px;
+        }
+        
+        .viewer {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #252525;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        iframe {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+        
+        .telegram-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #0088cc;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🛒 SHOPEE + TELEGRAM LOGGER 🔥</h1>
-        
-        <div class="telegram-panel">
-            <h3>📡 TELEGRAM CONNECTED ✅</h3>
-            <p>Bot Token: <code>8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18</code></p>
-            <p>Chat ID: <code>8313500840</code></p>
-            <button class="btn btn-telegram" onclick="testTelegram()">🔍 TEST KIRIM KE TELEGRAM</button>
-            <span id="telegramStatus"></span>
+    <div class="navbar">
+        <div class="logo">⚡ SHOPEE FAST LOAD</div>
+        <div class="quick-actions">
+            <button class="action-btn" onclick="loadShopee()">🔄 RELOAD</button>
+            <button class="action-btn" onclick="clearCache()">🧹 CLEAR</button>
+            <button class="action-btn" onclick="debugMode()">🐛 DEBUG</button>
         </div>
-        
-        <button class="btn" onclick="loadShopee()">🔥 LOAD SHOPEE</button>
-        <button class="btn" onclick="monitorWhiteScreen()">👁️ MONITOR WHITE SCREEN</button>
-        <button class="btn" onclick="clearCacheAndReport()">🧹 CLEAR CACHE + REPORT</button>
-        
-        <div id="log-container">
-            <h3>System Log:</h3>
-            <div id="log" class="log"></div>
-        </div>
-        
-        <iframe id="shopeeFrame"></iframe>
     </div>
+    
+    <div class="main-content">
+        <div class="sidebar">
+            <h3>STATUS</h3>
+            <div class="stats">
+                <div class="stat-card">
+                    <div>LOAD TIME</div>
+                    <div class="stat-value" id="loadTime">0ms</div>
+                </div>
+                <div class="stat-card">
+                    <div>CONNECTION</div>
+                    <div class="stat-value" id="connection">✅</div>
+                </div>
+            </div>
+            
+            <h3>URLS</h3>
+            <button class="action-btn" style="width:100%;margin:5px 0;" onclick="loadMain()">🏠 MAIN SITE</button>
+            <button class="action-btn" style="width:100%;margin:5px 0;" onclick="loadMobile()">📱 MOBILE</button>
+            <button class="action-btn" style="width:100%;margin:5px 0;" onclick="loadSeller()">🛍️ SELLER</button>
+        </div>
+        
+        <div class="viewer">
+            <iframe id="shopeeFrame"></iframe>
+        </div>
+    </div>
+    
+    <div class="telegram-indicator" title="Telegram Connected"></div>
 
     <script>
-        // CONFIG TELEGRAM
         const BOT_TOKEN = "8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18";
         const CHAT_ID = "8313500840";
-        let logData = [];
+        let loadStartTime = 0;
         
-        // Fungsi kirim ke Telegram
-        async function sendToTelegram(message) {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            const text = `🔰 SHOPEE MONITOR 🔰\n${message}\n⏰ ${new Date().toLocaleString()}\n🌐 ${navigator.userAgent.substring(0,50)}...`;
-            
+        async function sendLog(action) {
+            const text = `🛒 SHOPEE: ${action}`;
             try {
-                const response = await fetch(url, {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         chat_id: CHAT_ID,
-                        text: text,
-                        parse_mode: 'HTML'
+                        text: text
                     })
                 });
-                return await response.json();
-            } catch (error) {
-                console.error('Telegram error:', error);
-                return null;
-            }
+            } catch(e) {}
         }
         
-        // Fungsi tambah log
-        function addLog(message, sendTelegram = false) {
-            const timestamp = new Date().toLocaleTimeString();
-            const logText = `[${timestamp}] ${message}`;
-            logData.push(logText);
-            
-            const logElement = document.getElementById('log');
-            if(logElement) {
-                logElement.innerHTML = logData.join('<br>');
-                logElement.scrollTop = logElement.scrollHeight;
-            }
-            
-            if(sendTelegram) {
-                sendToTelegram(message);
-            }
-            
-            console.log(logText);
-        }
-        
-        // Test Telegram
-        function testTelegram() {
-            addLog("🔄 Mengirim test ke Telegram...", true);
-            document.getElementById('telegramStatus').innerHTML = "✅ Test terkirim!";
-        }
-        
-        // Load Shopee dengan monitoring
         function loadShopee() {
-            addLog("🔄 Loading Shopee...", true);
+            loadStartTime = performance.now();
+            sendLog("Reloading Shopee");
             
-            const timestamp = Date.now();
-            const random = Math.floor(Math.random() * 1000000);
-            const shopeeUrl = `https://shopee.co.id/?_t=${timestamp}_${random}&bypass=cybervoids`;
+            const url = `https://shopee.co.id?_=${Date.now()}&fast=1`;
+            document.getElementById('shopeeFrame').src = url;
+            document.getElementById('connection').textContent = "⌛";
             
-            const iframe = document.getElementById('shopeeFrame');
-            iframe.src = shopeeUrl;
-            
-            // Monitor iframe loading
-            iframe.onload = function() {
-                addLog("✅ Shopee berhasil di-load di iframe", true);
-                
-                // Cek apakah iframe putih
-                setTimeout(() => {
-                    checkIframeContent();
-                }, 3000);
-            };
-            
-            iframe.onerror = function() {
-                addLog("❌ Error loading Shopee iframe", true);
+            document.getElementById('shopeeFrame').onload = function() {
+                const loadTime = Math.round(performance.now() - loadStartTime);
+                document.getElementById('loadTime').textContent = `${loadTime}ms`;
+                document.getElementById('connection').textContent = "✅";
+                sendLog(`Loaded in ${loadTime}ms`);
             };
         }
         
-        // Cek konten iframe
-        function checkIframeContent() {
-            const iframe = document.getElementById('shopeeFrame');
-            try {
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                const bodyText = iframeDoc.body.innerText || "";
-                const bodyHTML = iframeDoc.body.innerHTML || "";
-                
-                if(bodyText.length < 100 && bodyHTML.length < 1000) {
-                    addLog("⚠️ DETECTED: White screen di iframe!", true);
-                    sendToTelegram("🚨 WHITE SCREEN DETECTED di Shopee! Body length: " + bodyText.length);
-                } else {
-                    addLog("✅ Konten Shopee terdeteksi normal", true);
-                }
-            } catch(e) {
-                addLog("⚠️ Cannot access iframe (CORS): " + e.message, true);
-            }
-        }
-        
-        // Monitor white screen
-        function monitorWhiteScreen() {
-            addLog("👁️ Memulai white screen monitoring...", true);
-            
-            setInterval(() => {
-                checkIframeContent();
-            }, 10000); // Cek setiap 10 detik
-        }
-        
-        // Clear cache + report
-        function clearCacheAndReport() {
-            addLog("🧹 Membersihkan cache...", true);
-            
-            // Clear storage
+        function clearCache() {
+            sendLog("Cache cleared");
             localStorage.clear();
             sessionStorage.clear();
-            
-            // Clear cookies
-            document.cookie.split(";").forEach(c => {
-                document.cookie = c.replace(/^ +/, "")
-                    .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-            });
-            
-            addLog("✅ Cache cleared, reloading...", true);
-            
-            setTimeout(() => {
-                location.reload(true);
-            }, 1000);
+            location.reload();
         }
         
-        // Tangkap error dari console
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            const errorMsg = `🚨 JS ERROR: ${msg} at ${lineNo}:${columnNo}`;
-            addLog(errorMsg, true);
-            return false;
-        };
+        function debugMode() {
+            sendLog("Debug mode activated");
+            document.getElementById('shopeeFrame').src = `https://shopee.co.id?_debug=${Date.now()}`;
+        }
         
-        // Auto-start
+        function loadMain() {
+            sendLog("Loading main site");
+            document.getElementById('shopeeFrame').src = "https://shopee.co.id";
+        }
+        
+        function loadMobile() {
+            sendLog("Loading mobile site");
+            document.getElementById('shopeeFrame').src = "https://m.shopee.co.id";
+        }
+        
+        function loadSeller() {
+            sendLog("Loading seller center");
+            document.getElementById('shopeeFrame').src = "https://seller.shopee.co.id";
+        }
+        
+        // Auto-load
         window.onload = function() {
-            addLog("CYBER_VOIDS Shopee Monitor aktif!", true);
-            addLog(`Browser: ${navigator.userAgent}`);
-            addLog(`URL: ${window.location.href}`);
-            
-            // Kirim startup message ke Telegram
-            sendToTelegram("🚀 SHOPEE MONITOR DIMULAI\nUser Agent: " + navigator.userAgent);
+            sendLog("Shopee Fast Load started");
+            loadShopee();
         };
     </script>
 </body>
